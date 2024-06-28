@@ -1,6 +1,7 @@
 package com.scaler.taskmanager.entities;
 
 import lombok.Data;
+import lombok.Generated;
 
 import java.util.Date;
 
