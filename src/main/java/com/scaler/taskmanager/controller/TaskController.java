@@ -4,7 +4,10 @@ import com.scaler.taskmanager.dto.CreateTaskDto;
 import com.scaler.taskmanager.dto.ErrorResponseDto;
 import com.scaler.taskmanager.dto.UpdateTaskDto;
 import com.scaler.taskmanager.entities.TaskEntity;
+import com.scaler.taskmanager.service.NoteService;
 import com.scaler.taskmanager.service.TaskService;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +17,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/tasks")
 public class TaskController {
+
+    @Autowired
+    ModelMapper modelMapper;
+
+    @Autowired
+    NoteService noteService;
+
     private TaskService taskService;
 
     public TaskController(TaskService taskService) {
@@ -29,8 +39,10 @@ public class TaskController {
     @GetMapping("/get/{id}")
     public ResponseEntity<TaskEntity> getTask(@PathVariable int id){
         var task = taskService.getTaskById(id);
+        var notes =  noteService.getNotesForTask(id);
         if(task==null)
             return  ResponseEntity.notFound().build();
+        var taskResponseNotesDto = modelMapper.map(task, TaskEntity.class);
         return ResponseEntity.ok(task);
     }
 

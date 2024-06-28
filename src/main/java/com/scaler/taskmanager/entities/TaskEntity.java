@@ -1,13 +1,15 @@
 package com.scaler.taskmanager.entities;
 
-import lombok.Data;
-import lombok.Generated;
+import lombok.*;
 
 import java.util.Date;
 
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class TaskEntity {
-    private int id;
+    private int taskId;
     private String title;
     private String description;
     private Date deadLine;

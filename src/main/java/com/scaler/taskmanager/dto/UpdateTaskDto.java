@@ -10,6 +10,6 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 public class UpdateTaskDto {
-    Date deadline;
-    Boolean completed;
+    private Date deadline;
+    private Boolean completed;
 }

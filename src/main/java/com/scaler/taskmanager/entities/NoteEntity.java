@@ -1,16 +1,17 @@
-package com.scaler.taskmanager.dto;
+package com.scaler.taskmanager.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.stereotype.Service;
 
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateTaskDto {
+@Getter
+@Setter
+public class NoteEntity {
+    private int noteId;
     private String title;
-    private String description;
-    private String deadline;
+    private String body;
 }
