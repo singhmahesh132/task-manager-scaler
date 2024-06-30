@@ -2,6 +2,7 @@ package com.scaler.taskmanager.controller;
 
 import com.scaler.taskmanager.dto.CreateTaskDto;
 import com.scaler.taskmanager.dto.ErrorResponseDto;
+import com.scaler.taskmanager.dto.TaskResponseDto;
 import com.scaler.taskmanager.dto.UpdateTaskDto;
 import com.scaler.taskmanager.entities.TaskEntity;
 import com.scaler.taskmanager.service.NoteService;
@@ -19,16 +20,15 @@ import java.util.List;
 public class TaskController {
 
     @Autowired
-    ModelMapper modelMapper;
-
-    @Autowired
     NoteService noteService;
 
-    private TaskService taskService;
+    private final TaskService taskService;
 
     public TaskController(TaskService taskService) {
         this.taskService = taskService;
     }
+
+    private final ModelMapper modelMapper = new ModelMapper();
 
     @GetMapping("/get-all")
     public ResponseEntity<List<TaskEntity>> getTasks(){
@@ -37,13 +37,18 @@ public class TaskController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<TaskEntity> getTask(@PathVariable int id){
+    public ResponseEntity<TaskResponseDto> getTask(@PathVariable int id){
+        //Usage of model mapper
+        //When the map method is called, the source and destination types are analyzed to determine which properties
+        //implicitly match according to a matching strategy and other configuration.
+        //Data is then mapped according to these matches.
         var task = taskService.getTaskById(id);
         var notes =  noteService.getNotesForTask(id);
         if(task==null)
             return  ResponseEntity.notFound().build();
-        var taskResponseNotesDto = modelMapper.map(task, TaskEntity.class);
-        return ResponseEntity.ok(task);
+        var taskResponseNotesDto = modelMapper.map(task, TaskResponseDto.class);
+        taskResponseNotesDto.setNotesList(notes);
+        return ResponseEntity.ok(taskResponseNotesDto);
     }
 
     @RequestMapping(value = {"/add"}, consumes = {"application/json"}, produces = {"application/json"}, method = {RequestMethod.POST})
